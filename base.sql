@@ -15,9 +15,7 @@ CREATE TABLE
 CREATE TABLE
     Operations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        operateur_id INTEGER NOT NULL,
-        nom TEXT NOT NULL,
-        FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
+        nom TEXT NOT NULL
     );
 
 CREATE TABLE
@@ -39,5 +37,36 @@ CREATE TABLE
         solde REAL NOT NULL,
         operateur_id INTEGER NOT NULL,
         FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
-    );  
+    );
 
+------------------ INSERTS ------------------
+INSERT INTO
+    Operateurs (nom)
+VALUES
+    ('Orange'),
+    ('Airtel'),
+    ('Yas');
+
+INSERT INTO
+    Prefixes (operateur_id, prefixe)
+VALUES
+    (1, '032'),
+    (2, '033'),
+    (3, '034');
+
+INSERT INTO
+    Operations (nom)
+VALUES
+    ('Depot'),
+    ('Retrait'),
+    ('Transfert');
+
+INSERT INTO
+    Frais (operation_id, montantmin, montantmax, frais)
+VALUES
+    (1, 0, 10000, 500),
+    (1, 10001, 50000, 1000),
+    (2, 0, 10000, 500),
+    (2, 10001, 50000, 1000),
+    (3, 0, 10000, 500),
+    (3, 10001, 50000, 1000);
