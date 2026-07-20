@@ -14,6 +14,10 @@
                         <label class="form-label">Numéro du destinataire</label>
                         <input type="tel" class="form-control" name="telephone_destinataire" pattern="03[2-4][0-9]{7}" maxlength="10" required>
                     </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" name="inclure_frais" value="1">
+                        <label class="form-check-label">Inclure frais de retrait</label>
+                    </div>  
                     <button type="submit" class="btn btn-info w-100 text-white">Transférer</button>
                 </form>
             </div>
