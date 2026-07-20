@@ -21,6 +21,7 @@ $routes->get('/frais/gains', 'FraisController::gains');
 $routes->get('/login', 'ClientController::index');
 $routes->post('/login', 'ClientController::login');
 $routes->get('/client', 'ClientController::accueil');
+$routes->get('/historique', 'ClientController::historique');
 $routes->get('/logout', 'ClientController::logout');
 
 $routes->get('/depot', 'DepotController::index'); 

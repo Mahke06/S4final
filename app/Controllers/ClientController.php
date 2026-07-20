@@ -68,7 +68,26 @@ class ClientController extends BaseController
         return redirect()->to('/client');
     }
 
-     public function logout()
+    public function historique()
+    {
+        $clientId = session()->get('client_id');
+        if (!$clientId) {
+            return redirect()->to('/login');
+        }
+
+        $db = \Config\Database::connect();
+        $historique = $db->table('Historique')
+            ->select('Historique.*, Operations.nom as operation_nom')
+            ->join('Operations', 'Operations.id = Historique.idoperation')
+            ->where('Historique.client_id', $clientId)
+            ->orderBy('Historique.date', 'DESC')
+            ->get()
+            ->getResultArray();
+
+        return view('historique', ['historique' => $historique]);
+    }
+
+    public function logout()
     {
         session()->destroy();
         return redirect()->to('/login');
