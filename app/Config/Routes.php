@@ -21,3 +21,12 @@ $routes->get('/login', 'ClientController::index');
 $routes->post('/login', 'ClientController::login');
 $routes->get('/client/(:num)', 'ClientController::accueil/$1');
 $routes->get('/logout', 'ClientController::logout');
+
+$routes->get('/depot', 'DepotController::index'); 
+$routes->post('/depot', 'DepotController::faireDepot');
+
+$routes->get('/retrait', 'RetraitController::index');
+$routes->post('/retrait', 'RetraitController::faireRetrait');
+
+$routes->get('/transfert', 'TransfertController::index');
+$routes->post('/transfert', 'TransfertController::faireTransfert');

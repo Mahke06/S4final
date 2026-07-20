@@ -13,3 +13,8 @@ Liée le table avec le Model et ajouter les champs
 ### 3 - Ajout dans Routes.php
 
 ### 4 - Creer login.php
+
+### 5 - Creation client.php
+
+## Faire l'operation coté client ETU004013
+### 1 - Faire le depot 

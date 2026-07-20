@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client</title>
+    <title>Retrait</title>
 </head>
 <body>
     <?php if (session()->get('errors')): ?>
@@ -17,15 +17,11 @@
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
-    
-    <h1>Bienvenue, <?= esc($client['nom']) ?> <?= esc($client['prenom']) ?></h1>
-    <p>Solde: <?= esc($client['solde']) ?> Ar</p>
-    <a href="/logout">Se déconnecter</a>
-
-    <h2>Opérations</h2>
-    <a href="/depot">Effectuer un depot</a>
-    <a href="/retrait">Effectuer un retrait</a>
-    <a href="/transfert">Effectuer un transfert</a>
-    <a href="/historique">Voir l'historique des transactions</a>
+    <h1>Effectuer un retrait</h1>
+    <form action="/retrait" method="post">
+        <label>Montant:</label>
+        <input type="number" name="montant" required>
+        <button type="submit">Enlever</button>
+    </form>
 </body>
 </html>
