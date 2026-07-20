@@ -39,6 +39,17 @@ CREATE TABLE
         FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
+CREATE TABLE
+    Historique (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        client_id INTEGER NOT NULL,
+        operation_id INTEGER NOT NULL,
+        montant REAL NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (operation_id) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+
 ------------------ INSERTS ------------------
 INSERT INTO
     Operateurs (nom)
@@ -70,3 +81,10 @@ VALUES
     (2, 10001, 50000, 1000),
     (3, 0, 10000, 500),
     (3, 10001, 50000, 1000);
+
+INSERT INTO
+    Client (nom, prenom, telephone, solde, operateur_id)
+VALUES
+    ('ANDRIANTSEHENO', 'Kenny', '0321234567', 0, 1),
+    ('RABEMANANJARA', 'Jonathan', '0339876543', 0, 2),
+    ('RABENANAHARY', 'Rojo', '0345678901', 0, 3);
