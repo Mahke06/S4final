@@ -38,3 +38,18 @@ Liée le table avec le Model et ajouter les champs
 
 ### 4 - Situation des comptes clients
 
+# Version 2 
+## Cote Operateur — ETU003894
+### 1 - Configuration des prefixes pour TOUS les operateurs
+
+### 2 - Commission supplementaire pour transferts vers d'autres operateurs
+
+### 3 - Page "Situation des gains" : separer operateur et autres operateurs
+
+### 4 - Situation des montants a envoyer a chaque operateur
+
+## Cote Client — ETU004013
+
+### 1 - Option "Inclure frais de retrait lors de l'envoi"
+
+### 2 - Envoi multiple vers plusieurs numeros
