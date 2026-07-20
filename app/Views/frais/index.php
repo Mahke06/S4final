@@ -6,6 +6,16 @@
     <title>Page de parametrage frais</title>
 </head>
 <body>
+    <?php if (session()->getFlashdata('error')): ?>
+        <p style="color:red"><?= esc(session()->getFlashdata('error')) ?></p>
+    <?php endif; ?>
+    <?php if (session()->getFlashdata('errors')): ?>
+        <ul style="color:red">
+        <?php foreach (session()->getFlashdata('errors') as $e): ?>
+            <li><?= esc($e) ?></li>
+        <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>

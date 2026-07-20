@@ -14,7 +14,7 @@ $routes->get('/frais/add', 'FraisController::add');
 $routes->post('/frais/add', 'FraisController::create');  
 $routes->get('/frais/edit/(:num)', 'FraisController::edit/$1');  
 $routes->post('/frais/update/(:num)', 'FraisController::update/$1'); 
-$routes->get('/frais/delete/(:num)', 'FraisController::delete/$1'); 
+$routes->match(['get', 'post'], '/frais/delete/(:num)', 'FraisController::delete/$1');
 
 /* ------  Kenny  ------*/
 $routes->get('/login', 'ClientController::index');

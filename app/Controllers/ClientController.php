@@ -10,7 +10,10 @@ use App\Models\ClientModel;
 class ClientController extends BaseController
 {
     public function index()
-    { 
+    {
+        if (session()->get('client_id')) {
+            return redirect()->to('/client/' . session()->get('client_id'));
+        }
         return view('login');
     }
 

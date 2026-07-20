@@ -10,9 +10,9 @@
     <title>Login</title>
 </head>
 <body>
-     <?php if (session()->get('errors')): ?>
+     <?php if (session()->getFlashdata('errors')): ?>
         <div class="errors">
-            <?php foreach (session()->get('errors') as $error): ?>
+            <?php foreach (session()->getFlashdata('errors') as $error): ?>
                 <p><?= esc($error) ?></p>
             <?php endforeach; ?>
         </div>
@@ -21,6 +21,7 @@
 
     <h1>Connectez vous</h1>
     <form action="/login" method="post">
+        <?= csrf_field() ?>
         <label>Telephone:</label>
         <input type="tel" name="telephone" pattern="03[2-4][0-9]{7}" maxlength="10" required>   
         <button type="submit">Se connecter</button>
