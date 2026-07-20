@@ -14,7 +14,7 @@ class ClientController extends BaseController
         if (session()->get('client_id')) {
             return redirect()->to('/client');
         }
-        return view('login');
+        return view('login', ['hideNavbar' => true]);
     }
 
     public function accueil()

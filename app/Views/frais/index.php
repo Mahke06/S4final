@@ -1,79 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page de parametrage frais</title>
-</head>
-<body>
-    <?php if (session()->getFlashdata('error')): ?>
-        <p style="color:red"><?= esc(session()->getFlashdata('error')) ?></p>
-    <?php endif; ?>
-    <?php if (session()->getFlashdata('errors')): ?>
-        <ul style="color:red">
-        <?php foreach (session()->getFlashdata('errors') as $e): ?>
-            <li><?= esc($e) ?></li>
-        <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
-    <table>
-        <thead>
-            <tr>
-                <th>Operation</th>
-                <th>Operateur</th>
-                <th>Montant Min</th>
-                <th>Montant Max</th>
-                <th>Frais</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($frais as $fraisItem): ?>
-            <tr>
-                <td><?php echo $fraisItem['operation_nom'] ?></td>
-                <td><?php echo $fraisItem['operateur_nom'] ?></td>
-                <td><?php echo $fraisItem['montantmin'] ?></td>
-                <td><?php echo $fraisItem['montantmax'] ?></td>
-                <td><?php echo $fraisItem['frais'] ?></td>
-                <td>
-                    <a href="<?php echo site_url('frais/edit/' . $fraisItem['id']); ?>">Edit</a>
-                    <form method="post" action="<?php echo site_url('frais/delete/' . $fraisItem['id']); ?>" style="display:inline">
-                        <?php echo csrf_field(); ?>
-                        <button type="submit" onclick="return confirm('Supprimer ?');">Delete</button>
+<?php $title = 'Paramétrage des frais'; include __DIR__ . '/../partials/header.php'; ?>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Paramétrage des frais</h4>
+    <a href="<?= site_url('frais/gains') ?>" class="btn btn-outline-primary btn-sm">Gains</a>
+</div>
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th>Opération</th>
+                    <th>Opérateur</th>
+                    <th>Montant Min</th>
+                    <th>Montant Max</th>
+                    <th>Frais</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($frais as $f): ?>
+                <tr>
+                    <td><?= esc($f['operation_nom']) ?></td>
+                    <td><?= esc($f['operateur_nom']) ?></td>
+                    <td><?= number_format($f['montantmin'], 0, ',', ' ') ?></td>
+                    <td><?= number_format($f['montantmax'], 0, ',', ' ') ?></td>
+                    <td><?= number_format($f['frais'], 0, ',', ' ') ?> Ar</td>
+                    <td class="text-end">
+                        <a href="<?= site_url('frais/edit/' . $f['id']) ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form method="post" action="<?= site_url('frais/delete/' . $f['id']) ?>" style="display:inline">
+                            <?= csrf_field() ?>
+                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ?')">Del</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+            <tfoot class="table-light">
+                <tr>
+                    <form method="post" action="<?= site_url('/frais/add') ?>">
+                        <?= csrf_field() ?>
+                        <td>
+                            <select class="form-select form-select-sm" name="idoperation">
+                                <?php foreach ($operations as $op): ?>
+                                    <option value="<?= $op['id'] ?>"><?= esc($op['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm" name="idoperateur">
+                                <?php foreach ($operateurs as $op): ?>
+                                    <option value="<?= $op['id'] ?>"><?= esc($op['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                        <td><input type="number" class="form-control form-control-sm" name="montantmin" step="0.01" required></td>
+                        <td><input type="number" class="form-control form-control-sm" name="montantmax" step="0.01" required></td>
+                        <td><input type="number" class="form-control form-control-sm" name="frais" step="0.01" required></td>
+                        <td class="text-end"><button type="submit" class="btn btn-sm btn-success">+</button></td>
                     </form>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-    <tfoot>
-        <tr>
-            <form method="post" action="<?php echo site_url('/frais/add') ?>">
-                <?php echo csrf_field(); ?>
-                <td>
-                    <select name="idoperation">
-                        <?php foreach ($operations as $op): ?>
-                            <option value="<?php echo $op['id'] ?>"><?php echo $op['nom'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-                <td>
-                    <select name="idoperateur">
-                        <?php foreach ($operateurs as $op): ?>
-                            <option value="<?php echo $op['id'] ?>"><?php echo $op['nom'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </td>
-                <td><input type="number" step="0.01" name="montantmin" required></td>
-                <td><input type="number" step="0.01" name="montantmax" required></td>
-                <td><input type="number" step="0.01" name="frais" required></td>
-                <td><button type="submit">Ajouter</button></td>
-            </form>
-        </tr>
-    </tfoot>
-
-    <a href="<?= site_url('frais/gains') ?>">Voir les gains</a>
-
-</body>
-</html>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<?php include __DIR__ . '/../partials/footer.php'; ?>

@@ -1,35 +1,24 @@
-<?php
-    ini_set("display_errors",1);
-    error_reporting(E_ALL);
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-     <?php if (session()->getFlashdata('errors')): ?>
-        <div class="errors">
-            <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                <p><?= esc($error) ?></p>
-            <?php endforeach; ?>
+<?php $title = 'Connexion'; $hideNavbar = true; include __DIR__ . '/partials/header.php'; ?>
+<div class="row justify-content-center" style="margin-top:80px">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <h4>Connexion</h4>
+                </div>
+                <form action="/login" method="post">
+                    <?= csrf_field() ?>
+                    <div class="mb-3">
+                        <label class="form-label">Numéro de téléphone</label>
+                        <input type="tel" class="form-control" name="telephone" pattern="03[2-4][0-9]{7}" maxlength="10" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/frais" class="text-decoration-none small">Paramétrage des frais</a>
+                </div>
+            </div>
         </div>
-    <?php endif; ?>
-
-
-    <h1>Connectez vous</h1>
-    <form action="/login" method="post">
-        <?= csrf_field() ?>
-        <label>Telephone:</label>
-        <input type="tel" name="telephone" pattern="03[2-4][0-9]{7}" maxlength="10" required>   
-        <button type="submit">Se connecter</button>
-    </form>
-
-
-    <button>
-        <a href="/frais">Page de parametrage des operateurs</a>
-    </button>
-</body>
-</html>
+    </div>
+</div>
+<?php include __DIR__ . '/partials/footer.php'; ?>

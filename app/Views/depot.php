@@ -1,27 +1,19 @@
-<?php
-    ini_set("display_errors",1);
-    error_reporting(E_ALL);
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Depot</title>
-</head>
-<body>
-    <?php if (session()->get('errors')): ?>
-        <div class="errors">
-            <?php foreach (session()->get('errors') as $error): ?>
-                <p><?= esc($error) ?></p>
-            <?php endforeach; ?>
+<?php $title = 'Dépôt'; include __DIR__ . '/partials/header.php'; ?>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h4>Effectuer un dépôt</h4>
+                <form action="/depot" method="post">
+                    <?= csrf_field() ?>
+                    <div class="mb-3">
+                        <label class="form-label">Montant</label>
+                        <input type="number" class="form-control" name="montant" step="0.01" min="1" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Déposer</button>
+                </form>
+            </div>
         </div>
-    <?php endif; ?>
-    <h1>Effectuer un depot</h1>
-    <form action="/depot" method="post">
-        <label>Montant:</label>
-        <input type="number" name="montant" required>
-        <button type="submit">Déposer</button>
-    </form>
-</body>
-</html>
+    </div>
+</div>
+<?php include __DIR__ . '/partials/footer.php'; ?>
