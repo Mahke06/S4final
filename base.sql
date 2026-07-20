@@ -7,9 +7,9 @@ CREATE TABLE
 CREATE TABLE
     Prefixes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        operateur_id INTEGER NOT NULL,
+        idoperateur INTEGER NOT NULL,
         prefixe TEXT NOT NULL,
-        FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (idoperateur) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -21,11 +21,11 @@ CREATE TABLE
 CREATE TABLE
     Frais (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        operation_id INTEGER NOT NULL,
+        idoperation INTEGER NOT NULL,
         montantmin REAL NOT NULL,
         montantmax REAL NOT NULL,
         frais REAL NOT NULL,
-        FOREIGN KEY (operation_id) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -35,19 +35,19 @@ CREATE TABLE
         prenom TEXT NOT NULL,
         telephone TEXT NOT NULL,
         solde REAL NOT NULL,
-        operateur_id INTEGER NOT NULL,
-        FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
+        idoperateur INTEGER NOT NULL,
+        FOREIGN KEY (idoperateur) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
     Historique (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         client_id INTEGER NOT NULL,
-        operation_id INTEGER NOT NULL,
+        idoperation INTEGER NOT NULL,
         montant REAL NOT NULL,
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (operation_id) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 ------------------ INSERTS ------------------
@@ -59,7 +59,7 @@ VALUES
     ('Yas');
 
 INSERT INTO
-    Prefixes (operateur_id, prefixe)
+    Prefixes (idoperateur, prefixe)
 VALUES
     (1, '032'),
     (2, '033'),
@@ -73,7 +73,7 @@ VALUES
     ('Transfert');
 
 INSERT INTO
-    Frais (operation_id, montantmin, montantmax, frais)
+    Frais (idoperation, montantmin, montantmax, frais)
 VALUES
     (1, 0, 10000, 500),
     (1, 10001, 50000, 1000),
@@ -83,7 +83,7 @@ VALUES
     (3, 10001, 50000, 1000);
 
 INSERT INTO
-    Client (nom, prenom, telephone, solde, operateur_id)
+    Client (nom, prenom, telephone, solde, idoperateur)
 VALUES
     ('ANDRIANTSEHENO', 'Kenny', '0321234567', 0, 1),
     ('RABEMANANJARA', 'Jonathan', '0339876543', 0, 2),
