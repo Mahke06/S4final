@@ -35,7 +35,7 @@ class RetraitController extends BaseController
             return redirect()->to('/login')->with('error', 'Client introuvable.');
         }
         $fraisModel = new FraisModel();
-        $frais = $fraisModel->where('idoperation', 2)
+        $frais = $fraisModel->where('idoperation', getOperateur('retrait'))
                             ->where('idoperateur', $client['idoperateur'])
                             ->where('montantmin <=', $montant)
                             ->where('montantmax >=', $montant)
