@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ClientModel;
+use App\Models\FraisModel;
 
 class DepotController extends BaseController
 {
@@ -33,8 +34,18 @@ class DepotController extends BaseController
         if (!$client) {
             return redirect()->to('/login')->with('error', 'Client introuvable.');
         }
+        $fraisModel = new FraisModel();
+        $frais = $fraisModel->where('idoperation', getOperateur('depot'))
+                            ->where('idoperateur', $client['idoperateur'])
+                            ->where('montantmin <=', $montant)
+                            ->where('montantmax >=', $montant)
+                            ->first();
         
-        $nouveauSolde = $client['solde'] + $montant;
+        if (!$frais) {
+            $frais['frais'] = 0;
+        }
+
+        $nouveauSolde = $client['solde'] + ($montant - $frais['frais']);
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 

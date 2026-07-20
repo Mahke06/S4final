@@ -37,7 +37,7 @@ class TransfertController extends BaseController
         }
         
         $fraisModel = new FraisModel();
-        $frais = $fraisModel->where('idoperation', 3)
+        $frais = $fraisModel->where('idoperation', getOperateur('transfert'))
                             ->where('idoperateur', $client['idoperateur'])
                             ->where('montantmin <=', $montant)
                             ->where('montantmax >=', $montant)
