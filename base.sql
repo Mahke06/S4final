@@ -44,11 +44,12 @@ CREATE TABLE
 CREATE TABLE
     Historique (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        client_id INTEGER NOT NULL,
+        opdate TIMESTAMP,
+        idclient INTEGER NOT NULL,
         idoperation INTEGER NOT NULL,
         montant REAL NOT NULL,
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (client_id) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (idclient) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
