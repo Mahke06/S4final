@@ -3,3 +3,13 @@
 
 ### 2 - Creation des tables dans base.sql (15 min ) ETU003894
 Table : Operateurs, Prefixes, Operations, Frais, Client 
+
+## Coté Client ETU004013
+### 1 - Creation Model ClientModel
+Liée le table avec le Model et ajouter les champs
+
+### 2 - Creation du ClientController
+
+### 3 - Ajout dans Routes.php
+
+### 4 - Creer login.php
