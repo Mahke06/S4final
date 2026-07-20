@@ -79,7 +79,7 @@ class ClientController extends BaseController
         $historique = $db->table('Historique')
             ->select('Historique.*, Operations.nom as operation_nom')
             ->join('Operations', 'Operations.id = Historique.idoperation')
-            ->where('Historique.client_id', $clientId)
+            ->where('Historique.idclient', $clientId)
             ->orderBy('Historique.date', 'DESC')
             ->get()
             ->getResultArray();

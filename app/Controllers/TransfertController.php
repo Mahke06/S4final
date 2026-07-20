@@ -64,6 +64,14 @@ class TransfertController extends BaseController
 
         $clientModel->update($destinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
 
+        $db = \Config\Database::connect();
+        $db->table('Historique')->insert([
+            'idclient'    => $clientId,
+            'idoperation' => 3,
+            'montant'     => $montant,
+            'frais'       => $frais ? $frais['frais'] : 0,
+        ]);
+
         return redirect()->to('/client')->with('success', 'Transfert effectue avec succes.');
     }
 }

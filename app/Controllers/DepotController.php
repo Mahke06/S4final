@@ -44,6 +44,14 @@ class DepotController extends BaseController
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 
+        $db = \Config\Database::connect();
+        $db->table('Historique')->insert([
+            'idclient'    => $clientId,
+            'idoperation' => 1,
+            'montant'     => $montant,
+            'frais'       => $fraisMontant,
+        ]);
+
         return redirect()->to('/client')->with('success', 'Depot effectue avec succes.');
     }
 }

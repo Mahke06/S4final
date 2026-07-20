@@ -53,6 +53,14 @@ class RetraitController extends BaseController
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 
+        $db = \Config\Database::connect();
+        $db->table('Historique')->insert([
+            'idclient'    => $clientId,
+            'idoperation' => 2,
+            'montant'     => $montant,
+            'frais'       => $frais ? $frais['frais'] : 0,
+        ]);
+
         return redirect()->to('/client')->with('success', 'Retrait effectue avec succes.');
     }
 }

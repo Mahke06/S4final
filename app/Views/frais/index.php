@@ -73,5 +73,7 @@
         </tr>
     </tfoot>
 
+    <a href="<?= site_url('frais/gains') ?>">Voir les gains</a>
+
 </body>
 </html>

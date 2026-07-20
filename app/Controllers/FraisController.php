@@ -150,9 +150,15 @@ class FraisController extends BaseController
     public function gains()
     {
         $db = \Config\Database::connect();
-        $query = $db->query('SELECT SUM(frais) AS total_gains FROM Historique');
-        $result = $query->getRow();
-        $data['total_gains'] = $result->total_gains ?? 0;
-        return view('frais/gains', $data);
+        $gains = $db->table('Historique')
+            ->select('Operations.nom, SUM(Historique.frais) AS total')
+            ->join('Operations', 'Operations.id = Historique.idoperation')
+            ->groupBy('Historique.idoperation')
+            ->get()
+            ->getResultArray();
+
+        $totalGlobal = array_sum(array_column($gains, 'total'));
+
+        return view('frais/gains', ['gains' => $gains, 'totalGlobal' => $totalGlobal]);
     }
 }
