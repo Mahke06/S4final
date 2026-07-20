@@ -22,10 +22,20 @@ class ClientModel extends Model
     public function getOperateur($telephone)
     {
         $prefixe = substr($telephone, 0, 3);
-        return $this->db->table('Prefixes')
-            ->select('Operateurs.*')
-            ->join('Operateurs', 'Operateurs.id = Prefixes.idoperateur')
-            ->where('Prefixes.prefixe', $prefixe)
+
+        $row = $this->db->table('NosPrefixes')
+            ->select('NotreOperateur.id, NotreOperateur.nom, \'nous\' AS type')
+            ->join('NotreOperateur', 'NotreOperateur.id = NosPrefixes.idnotreoperateur')
+            ->where('NosPrefixes.prefixe', $prefixe)
+            ->get()
+            ->getRowArray();
+
+        if ($row) return $row;
+
+        return $this->db->table('AutrePrefixe')
+            ->select('AutreOperateur.id, AutreOperateur.nom, \'autre\' AS type')
+            ->join('AutreOperateur', 'AutreOperateur.id = AutrePrefixe.idautreoperateur')
+            ->where('AutrePrefixe.prefixe', $prefixe)
             ->get()
             ->getRowArray();
     }

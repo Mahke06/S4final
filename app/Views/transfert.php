@@ -12,7 +12,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Numéro du destinataire</label>
-                        <input type="tel" class="form-control" name="telephone_destinataire" pattern="03[2-4][0-9]{7}" maxlength="10" required>
+                        <input type="tel" class="form-control" name="telephone_destinataire" pattern="[0-9]{10}" maxlength="10" required>
                     </div>
                     <button type="submit" class="btn btn-info w-100 text-white">Transférer</button>
                 </form>

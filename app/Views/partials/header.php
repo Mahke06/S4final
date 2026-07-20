@@ -24,7 +24,7 @@
                     <li class="nav-item"><a class="nav-link" href="/historique">Historique</a></li>
                     <li class="nav-item"><a class="nav-link text-danger" href="/logout">Déconnexion</a></li>
                 <?php else: ?>
-                    <li class="nav-item"><a class="nav-link" href="/frais">Paramètres</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Exit</a></li>
                 <?php endif; ?>
             </ul>
         </div>

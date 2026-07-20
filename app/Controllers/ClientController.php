@@ -41,12 +41,11 @@ class ClientController extends BaseController
 
         $regles = [
             'telephone' => [
-                'rules'  => 'required|exact_length[10]|numeric|regex_match[/^03[2-4]\d{7}$/]',
+                'rules'  => 'required|exact_length[10]|numeric',
                 'errors' => [
                     'required'    => 'Le téléphone est obligatoire.',
                     'exact_length'=> 'Le téléphone doit avoir 10 chiffres.',
                     'numeric'     => 'Ne doit contenir que des chiffres.',
-                    'regex_match' => 'Numéro invalide (032/033/034 requis).',
                 ],
             ],
         ];
@@ -54,13 +53,22 @@ class ClientController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
+        $prefixe = substr($telephone, 0, 3);
+        $db = \Config\Database::connect();
+        $estNotrePrefixe = $db->table('NosPrefixes')->where('prefixe', $prefixe)->countAllResults() > 0;
+
+        if (! $estNotrePrefixe) {
+            return redirect()->back()->withInput()->with('errors', ['Verifier numero.']);
+        }
+
         $model = new ClientModel();
         $client = $model->where('telephone', $telephone)->first();
-        $operateur = $model->getOperateur($telephone);
 
         if (! $client) {
-            return redirect()->back()->withInput()->with('errors',['Numero non existant.']);
+            return redirect()->back()->withInput()->with('errors',['Verifier numero.']);
         }
+
+        $operateur = $model->getOperateur($telephone);
 
         session()->set('client_id', $client['id']);
         session()->set('operateur', $operateur);

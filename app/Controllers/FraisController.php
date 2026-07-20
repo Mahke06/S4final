@@ -8,27 +8,23 @@ class FraisController extends BaseController
 {
     public function index()
     {
-        $model              = new FraisModel();
-        $data['frais']      = $model->Operateursetoperation();
-        $db                 = \Config\Database::connect();
-        $data['operateurs'] = $db->table('Operateurs')->get()->getResultArray();
-        $data['operations'] = $db->table('Operations')->get()->getResultArray();
-        return view('frais/index', $data);
-    }
-
-    public function add()
-    {
-        $db                 = \Config\Database::connect();
-        $data['operateurs'] = $db->table('Operateurs')->get()->getResultArray();
-        $data['operations'] = $db->table('Operations')->get()->getResultArray();
-        return view('frais/form', $data);
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
+        $model = new FraisModel();
+        $all   = $model->select('Frais.*, Operations.nom AS operation_nom')
+            ->join('Operations', 'Operations.id = Frais.idoperation')
+            ->orderBy('Frais.montantmin')
+            ->findAll();
+        $data['depot']     = array_filter($all, fn($f) => $f['idoperation'] == 1);
+        $data['retrait']   = array_filter($all, fn($f) => $f['idoperation'] == 2);
+        $data['transfert'] = array_filter($all, fn($f) => $f['idoperation'] == 3);
+        return view('admin/page_frais', $data);
     }
 
     public function create()
     {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
         $regles = [
             'idoperation' => 'required|integer',
-            'idoperateur' => 'required|integer',
             'montantmin'  => 'required|numeric',
             'montantmax'  => 'required|numeric',
             'frais'       => 'required|numeric',
@@ -47,7 +43,7 @@ class FraisController extends BaseController
 
         $model    = new FraisModel();
         $existing = $model->where('idoperation', $this->request->getPost('idoperation'))
-            ->where('idoperateur', $this->request->getPost('idoperateur'))
+            ->where('idnotreoperateur', 1)
             ->groupStart()
             ->where('montantmin <', $montantmax)
             ->where('montantmax >', $montantmin)
@@ -60,41 +56,41 @@ class FraisController extends BaseController
 
         $model->save([
             'idoperation' => $this->request->getPost('idoperation'),
-            'idoperateur' => $this->request->getPost('idoperateur'),
+            'idnotreoperateur' => 1,
             'montantmin'  => $montantmin,
             'montantmax'  => $montantmax,
             'frais'       => (float) $this->request->getPost('frais'),
         ]);
 
-        return redirect()->to('/frais');
+        return redirect()->to('/admin/frais');
     }
 
     public function edit($id)
     {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
         $model = new FraisModel();
         $frais = $model->find($id);
         if (! $frais) {
-            return redirect()->to('/frais')->with('error', 'Frais introuvable.');
+            return redirect()->to('/admin/frais')->with('error', 'Frais introuvable.');
         }
 
         $data['frais']      = $frais;
         $db                 = \Config\Database::connect();
-        $data['operateurs'] = $db->table('Operateurs')->get()->getResultArray();
         $data['operations'] = $db->table('Operations')->get()->getResultArray();
-        return view('frais/form', $data);
+        return view('admin/page_form', $data);
     }
 
     public function update($id)
     {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
         $model = new FraisModel();
         $frais = $model->find($id);
         if (! $frais) {
-            return redirect()->to('/frais')->with('error', 'Frais introuvable.');
+            return redirect()->to('/admin/frais')->with('error', 'Frais introuvable.');
         }
 
         $regles = [
             'idoperation' => 'required|integer',
-            'idoperateur' => 'required|integer',
             'montantmin'  => 'required|numeric',
             'montantmax'  => 'required|numeric',
             'frais'       => 'required|numeric',
@@ -112,7 +108,7 @@ class FraisController extends BaseController
         }
 
         $existing = $model->where('idoperation', $this->request->getPost('idoperation'))
-            ->where('idoperateur', $this->request->getPost('idoperateur'))
+            ->where('idnotreoperateur', 1)
             ->where('id !=', $id)
             ->groupStart()
             ->where('montantmin <', $montantmax)
@@ -126,39 +122,54 @@ class FraisController extends BaseController
 
         $model->update($id, [
             'idoperation' => $this->request->getPost('idoperation'),
-            'idoperateur' => $this->request->getPost('idoperateur'),
+            'idnotreoperateur' => 1,
             'montantmin'  => $montantmin,
             'montantmax'  => $montantmax,
             'frais'       => (float) $this->request->getPost('frais'),
         ]);
 
-        return redirect()->to('/frais');
+        return redirect()->to('/admin/frais');
     }
 
     public function delete($id)
     {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
         $model = new FraisModel();
         $frais = $model->find($id);
         if (! $frais) {
-            return redirect()->to('/frais')->with('error', 'Frais introuvable.');
+            return redirect()->to('/admin/frais')->with('error', 'Frais introuvable.');
         }
 
         $model->delete($id);
-        return redirect()->to('/frais');
+        return redirect()->to('/admin/frais');
     }
 
     public function gains()
     {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
         $db = \Config\Database::connect();
-        $gains = $db->table('Historique')
-            ->select('Operations.nom, SUM(Historique.frais) AS total')
-            ->join('Operations', 'Operations.id = Historique.idoperation')
-            ->groupBy('Historique.idoperation')
-            ->get()
-            ->getResultArray();
 
+        $gains = $db->query("
+            SELECT
+                CASE WHEN np.id IS NOT NULL THEN 'Nous' ELSE 'Autre' END AS type,
+                o.nom AS operation,
+                SUM(h.frais) AS total
+            FROM Historique h
+            JOIN Client c ON c.id = h.idclient
+            JOIN Operations o ON o.id = h.idoperation
+            LEFT JOIN NosPrefixes np ON SUBSTR(c.telephone, 1, 3) = np.prefixe
+            GROUP BY type, h.idoperation
+            ORDER BY type, o.nom
+        ")->getResultArray();
+
+        $nos    = array_filter($gains, fn($g) => $g['type'] === 'Nous');
+        $autres = array_filter($gains, fn($g) => $g['type'] === 'Autre');
         $totalGlobal = array_sum(array_column($gains, 'total'));
 
-        return view('frais/gains', ['gains' => $gains, 'totalGlobal' => $totalGlobal]);
+        return view('admin/page_gains', [
+            'nos'          => $nos,
+            'autres'       => $autres,
+            'totalGlobal'  => $totalGlobal,
+        ]);
     }
 }

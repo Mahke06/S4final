@@ -1,15 +1,27 @@
-<?php $title = 'Paramétrage des frais'; include __DIR__ . '/../partials/header.php'; ?>
+<?php
+$title = 'Paramétrage des frais';
+include __DIR__ . '/../partials/header.php';
+$operations = [
+    1 => 'Dépôt',
+    2 => 'Retrait',
+    3 => 'Transfert',
+];
+$opIds = [1 => 'depot', 2 => 'retrait', 3 => 'transfert'];
+?>
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0">Paramétrage des frais</h4>
-    <a href="<?= site_url('frais/gains') ?>" class="btn btn-outline-primary btn-sm">Gains</a>
+    <div>
+        <a href="<?= site_url('admin') ?>" class="btn btn-outline-secondary btn-sm">Retour</a>
+    </div>
 </div>
-<div class="card shadow-sm border-0">
+
+<?php foreach ([1, 2, 3] as $opId): $rows = ${$opIds[$opId]}; ?>
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header fw-bold"><?= $operations[$opId] ?></div>
     <div class="table-responsive">
         <table class="table table-striped table-hover mb-0">
             <thead class="table-dark">
                 <tr>
-                    <th>Opération</th>
-                    <th>Opérateur</th>
                     <th>Montant Min</th>
                     <th>Montant Max</th>
                     <th>Frais</th>
@@ -17,16 +29,14 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($frais as $f): ?>
+                <?php foreach ($rows as $f): ?>
                 <tr>
-                    <td><?= esc($f['operation_nom']) ?></td>
-                    <td><?= esc($f['operateur_nom']) ?></td>
                     <td><?= number_format($f['montantmin'], 0, ',', ' ') ?></td>
                     <td><?= number_format($f['montantmax'], 0, ',', ' ') ?></td>
                     <td><?= number_format($f['frais'], 0, ',', ' ') ?> Ar</td>
                     <td class="text-end">
-                        <a href="<?= site_url('frais/edit/' . $f['id']) ?>" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <form method="post" action="<?= site_url('frais/delete/' . $f['id']) ?>" style="display:inline">
+                        <a href="<?= site_url('admin/frais/edit/' . $f['id']) ?>" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <form method="post" action="<?= site_url('admin/frais/delete/' . $f['id']) ?>" style="display:inline">
                             <?= csrf_field() ?>
                             <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ?')">Del</button>
                         </form>
@@ -36,22 +46,9 @@
             </tbody>
             <tfoot class="table-light">
                 <tr>
-                    <form method="post" action="<?= site_url('/frais/add') ?>">
+                    <form method="post" action="<?= site_url('/admin/frais/add') ?>">
                         <?= csrf_field() ?>
-                        <td>
-                            <select class="form-select form-select-sm" name="idoperation">
-                                <?php foreach ($operations as $op): ?>
-                                    <option value="<?= $op['id'] ?>"><?= esc($op['nom']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-select form-select-sm" name="idoperateur">
-                                <?php foreach ($operateurs as $op): ?>
-                                    <option value="<?= $op['id'] ?>"><?= esc($op['nom']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
+                        <input type="hidden" name="idoperation" value="<?= $opId ?>">
                         <td><input type="number" class="form-control form-control-sm" name="montantmin" step="0.01" required></td>
                         <td><input type="number" class="form-control form-control-sm" name="montantmax" step="0.01" required></td>
                         <td><input type="number" class="form-control form-control-sm" name="frais" step="0.01" required></td>
@@ -62,4 +59,5 @@
         </table>
     </div>
 </div>
+<?php endforeach; ?>
 <?php include __DIR__ . '/../partials/footer.php'; ?>

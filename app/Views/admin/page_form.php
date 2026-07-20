@@ -4,21 +4,13 @@
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
                 <h4 class="mb-4">Modifier un frais</h4>
-                <form method="post" action="<?= site_url('frais/update/' . $frais['id']) ?>">
+                <form method="post" action="<?= site_url('admin/frais/update/' . $frais['id']) ?>">
                     <?= csrf_field() ?>
                     <div class="mb-3">
                         <label class="form-label">Opération</label>
                         <select class="form-select" name="idoperation">
                             <?php foreach ($operations as $op): ?>
                                 <option value="<?= $op['id'] ?>" <?= $op['id'] == $frais['idoperation'] ? 'selected' : '' ?>><?= esc($op['nom']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Opérateur</label>
-                        <select class="form-select" name="idoperateur">
-                            <?php foreach ($operateurs as $op): ?>
-                                <option value="<?= $op['id'] ?>" <?= $op['id'] == $frais['idoperateur'] ? 'selected' : '' ?>><?= esc($op['nom']) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -36,7 +28,7 @@
                     </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Modifier</button>
-                        <a href="<?= site_url('frais') ?>" class="btn btn-outline-secondary">Annuler</a>
+                        <a href="<?= site_url('admin/frais') ?>" class="btn btn-outline-secondary">Annuler</a>
                     </div>
                 </form>
             </div>
