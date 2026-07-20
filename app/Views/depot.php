@@ -10,6 +10,13 @@
     <title>Depot</title>
 </head>
 <body>
+    <?php if (session()->get('errors')): ?>
+        <div class="errors">
+            <?php foreach (session()->get('errors') as $error): ?>
+                <p><?= esc($error) ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
     <h1>Effectuer un depot</h1>
     <form action="/depot" method="post">
         <label>Montant:</label>

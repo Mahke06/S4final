@@ -10,6 +10,14 @@
     <title>Client</title>
 </head>
 <body>
+    <?php if (session()->get('errors')): ?>
+        <div class="errors">
+            <?php foreach (session()->get('errors') as $error): ?>
+                <p><?= esc($error) ?></p>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+    
     <h1>Bienvenue, <?= esc($client['nom']) ?> <?= esc($client['prenom']) ?></h1>
     <p>Solde: <?= esc($client['solde']) ?> Ar</p>
     <a href="/logout">Se déconnecter</a>

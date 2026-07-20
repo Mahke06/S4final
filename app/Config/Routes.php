@@ -20,3 +20,6 @@ $routes->get('/logout', 'ClientController::logout');
 
 $routes->get('/depot', 'DepotController::index'); 
 $routes->post('/depot', 'DepotController::faireDepot');
+
+$routes->get('/retrait', 'RetraitController::index');
+$routes->post('/retrait', 'RetraitController::faireRetrait');
