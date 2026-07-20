@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ClientModel;
+use App\Models\FraisModel;
 
 class RetraitController extends BaseController
 {
@@ -33,8 +34,22 @@ class RetraitController extends BaseController
         if (!$client) {
             return redirect()->to('/login')->with('error', 'Client introuvable.');
         }
-        
-        $nouveauSolde = $client['solde'] - $montant;
+        $fraisModel = new FraisModel();
+        $frais = $fraisModel->where('idoperation', 2)
+                            ->where('idoperateur', $client['idoperateur'])
+                            ->where('montantmin <=', $montant)
+                            ->where('montantmax >=', $montant)
+                            ->first();
+
+        if (!$frais) {
+            $frais['frais'] = 0;
+        }
+
+        $nouveauSolde = $client['solde'] - ($montant + $frais['frais']);
+
+        if ($nouveauSolde < 0) {
+            return redirect()->back()->withInput()->with('errors',['Solde insuffisant pour effectuer ce retrait.']);
+        }
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 
