@@ -15,11 +15,12 @@ $routes->post('/frais/add', 'FraisController::create');
 $routes->get('/frais/edit/(:num)', 'FraisController::edit/$1');  
 $routes->post('/frais/update/(:num)', 'FraisController::update/$1'); 
 $routes->match(['get', 'post'], '/frais/delete/(:num)', 'FraisController::delete/$1');
+$routes->get('/frais/gains', 'FraisController::gains');
 
 /* ------  Kenny  ------*/
 $routes->get('/login', 'ClientController::index');
 $routes->post('/login', 'ClientController::login');
-$routes->get('/client/(:num)', 'ClientController::accueil/$1');
+$routes->get('/client', 'ClientController::accueil');
 $routes->get('/logout', 'ClientController::logout');
 
 $routes->get('/depot', 'DepotController::index'); 

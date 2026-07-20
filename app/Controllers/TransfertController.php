@@ -47,6 +47,6 @@ class TransfertController extends BaseController
         $nouveauSoldeDestinataire = $destinataire['solde'] + $montant;
         $clientModel->update($destinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
 
-        return redirect()->to('/client/' . $clientId)->with('success', 'Transfert effectué avec succès.');
+        return redirect()->to('/client')->with('success', 'Transfert effectue avec succes.');
     }
 }

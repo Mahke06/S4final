@@ -29,9 +29,9 @@ class FraisController extends BaseController
         $regles = [
             'idoperation' => 'required|integer',
             'idoperateur' => 'required|integer',
-            'montantmin'  => 'required|numeric|greater_than_equal_to[0]',
-            'montantmax'  => 'required|numeric|greater_than[0]',
-            'frais'       => 'required|numeric|greater_than[0]',
+            'montantmin'  => 'required|numeric',
+            'montantmax'  => 'required|numeric',
+            'frais'       => 'required|numeric',
         ];
 
         if (! $this->validate($regles)) {
@@ -95,9 +95,9 @@ class FraisController extends BaseController
         $regles = [
             'idoperation' => 'required|integer',
             'idoperateur' => 'required|integer',
-            'montantmin'  => 'required|numeric|greater_than_equal_to[0]',
-            'montantmax'  => 'required|numeric|greater_than[0]',
-            'frais'       => 'required|numeric|greater_than[0]',
+            'montantmin'  => 'required|numeric',
+            'montantmax'  => 'required|numeric',
+            'frais'       => 'required|numeric',
         ];
 
         if (! $this->validate($regles)) {
@@ -145,5 +145,14 @@ class FraisController extends BaseController
 
         $model->delete($id);
         return redirect()->to('/frais');
+    }
+
+    public function gains()
+    {
+        $db = \Config\Database::connect();
+        $query = $db->query('SELECT SUM(frais) AS total_gains FROM Historique');
+        $result = $query->getRow();
+        $data['total_gains'] = $result->total_gains ?? 0;
+        return view('frais/gains', $data);
     }
 }

@@ -38,6 +38,6 @@ class DepotController extends BaseController
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 
-        return redirect()->to('/client/' . $clientId)->with('success', 'Depot effectué avec succès.');
+        return redirect()->to('/client')->with('success', 'Depot effectue avec succes.');
     }
 }

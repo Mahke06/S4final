@@ -12,22 +12,24 @@ class ClientController extends BaseController
     public function index()
     {
         if (session()->get('client_id')) {
-            return redirect()->to('/client/' . session()->get('client_id'));
+            return redirect()->to('/client');
         }
         return view('login');
     }
 
-    public function accueil($id = null)
+    public function accueil()
     {
-        if (! session()->get('client_id')) {
+        $clientId = session()->get('client_id');
+        if (! $clientId) {
             return redirect()->to('/login');
         }
 
         $model = new ClientModel();
-        $client = $model->find($id);
+        $client = $model->find($clientId);
 
         if (! $client) {
-            return redirect()->to('/login')->with('error', 'Client introuvable.');
+            session()->destroy();
+            return redirect()->to('/login');
         }
 
         return view('client', ['client' => $client]);
@@ -54,14 +56,16 @@ class ClientController extends BaseController
 
         $model = new ClientModel();
         $client = $model->where('telephone', $telephone)->first();
+        $operateur = $model->getOperateur($telephone);
 
         if (! $client) {
             return redirect()->back()->withInput()->with('errors',['Numero non existant.']);
         }
 
         session()->set('client_id', $client['id']);
+        session()->set('operateur', $operateur);
 
-        return redirect()->to('/client/' . $client['id']);
+        return redirect()->to('/client');
     }
 
      public function logout()

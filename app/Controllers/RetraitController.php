@@ -38,6 +38,6 @@ class RetraitController extends BaseController
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);
 
-        return redirect()->to('/client/' . $clientId)->with('success', 'Retrait effectué avec succès.');
+        return redirect()->to('/client')->with('success', 'Retrait effectue avec succes.');
     }
 }
