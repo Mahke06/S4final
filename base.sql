@@ -40,3 +40,4 @@ CREATE TABLE
         operateur_id INTEGER NOT NULL,
         FOREIGN KEY (operateur_id) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
     );  
+
