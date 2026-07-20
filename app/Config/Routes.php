@@ -23,3 +23,6 @@ $routes->post('/depot', 'DepotController::faireDepot');
 
 $routes->get('/retrait', 'RetraitController::index');
 $routes->post('/retrait', 'RetraitController::faireRetrait');
+
+$routes->get('/transfert', 'TransfertController::index');
+$routes->post('/transfert', 'TransfertController::faireTransfert');
