@@ -11,6 +11,7 @@ $routes->get('/', 'Home::index');
 $routes->get('/loginOp', 'AdminController::index');
 $routes->post('/loginOp', 'AdminController::login');
 $routes->get('/admin', 'AdminController::choix');
+$routes->get('/admin/clients', 'AdminController::clients');
 $routes->get('/admin/commission', 'AdminController::commission');
 $routes->post('/admin/commission/add', 'AdminController::ajoutCommission');
 $routes->post('/admin/commission/update/(:num)', 'AdminController::updateCommission/$1');

@@ -41,6 +41,18 @@ class AdminController extends BaseController
         return view('admin/choix');
     }
 
+    public function clients()
+    {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
+        $db = \Config\Database::connect();
+        $data['clients'] = $db->query("
+            SELECT c.* FROM Client c
+            JOIN NosPrefixes np ON SUBSTR(c.telephone, 1, 3) = np.prefixe
+            ORDER BY c.nom
+        ")->getResultArray();
+        return view('admin/page_clients', $data);
+    }
+
     public function commission()
     {
         if (!session()->get('admin_id')) {

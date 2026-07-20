@@ -36,7 +36,7 @@ class RetraitController extends BaseController
         }
         $fraisModel = new FraisModel();
         $frais = $fraisModel->where('idoperation', 2)
-                            ->where('idoperateur', session()->get('operateur')['id'])
+                            ->where('idnotreoperateur', session()->get('operateur')['id'])
                             ->where('montantmin <=', $montant)
                             ->where('montantmax >=', $montant)
                             ->first();

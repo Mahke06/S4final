@@ -52,7 +52,7 @@ class TransfertController extends BaseController
 
         $fraisRow = $fraisModel
             ->where('idoperation', 3)
-            ->where('idoperateur', $operateurSession)
+            ->where('idnotreoperateur', $operateurSession)
             ->where('montantmin <=', $montant)
             ->where('montantmax >=', $montant)
             ->first();
@@ -61,7 +61,7 @@ class TransfertController extends BaseController
         if ($inclureFrais && $memeOperateur) {
             $fraisRetraitRow = $fraisModel
                 ->where('idoperation', 2)
-                ->where('idoperateur', $operateurSession)
+                ->where('idnotreoperateur', $operateurSession)
                 ->where('montantmin <=', $montant)
                 ->where('montantmax >=', $montant)
                 ->first();
@@ -71,7 +71,7 @@ class TransfertController extends BaseController
 
             $fraisRow = $fraisModel
                 ->where('idoperation', 3)
-                ->where('idoperateur', $operateurSession)
+                ->where('idnotreoperateur', $operateurSession)
                 ->where('montantmin <=', $montantEnvoye)
                 ->where('montantmax >=', $montantEnvoye)
                 ->first();
@@ -81,7 +81,18 @@ class TransfertController extends BaseController
                 'Option inclure frais disponible uniquement pour le même opérateur.');
         }
 
-        $totalADebiter = $montantEnvoye + $fraisTransfert;
+        $commission = 0;
+        if ($operateurDest && $operateurDest['type'] === 'autre') {
+            $db = \Config\Database::connect();
+            $commissionRow = $db->table('Commission')
+                ->where('idautreoperateur', $operateurDest['id'])
+                ->get()->getRowArray();
+            if ($commissionRow) {
+                $commission = $montantEnvoye * $commissionRow['pourcentage'] / 100;
+            }
+        }
+
+        $totalADebiter = $montantEnvoye + $fraisTransfert + $commission;
 
         if ($client['solde'] < $totalADebiter) {
             return redirect()->back()->withInput()->with('errors', [
@@ -109,9 +120,21 @@ class TransfertController extends BaseController
             ]);
         }
 
+        if ($commission > 0) {
+            $db->table('Historique')->insert([
+                'idclient'    => $clientId,
+                'idoperation' => 4,
+                'montant'     => $montantEnvoye,
+                'frais'       => $commission,
+            ]);
+        }
+
         $msg = 'Transfert effectué avec succès.';
         if ($fraisRetrait > 0) {
             $msg .= ' (Frais retrait inclus)';
+        }
+        if ($commission > 0) {
+            $msg .= ' (Commission inter-operateur appliquee)';
         }
 
         return redirect()->to('/client')->with('success', $msg);
@@ -181,7 +204,7 @@ class TransfertController extends BaseController
             return redirect()->back()->withInput()->with('errors', ['Ajoutez au moins 2 numéros.']); 
         }
 
-        $row = $fraisModel->where('idoperation', 3)->where('idoperateur', $idOperateur)
+        $row = $fraisModel->where('idoperation', 3)->where('idnotreoperateur', $idOperateur)
             ->where('montantmin <=', $montantParPersonne)->where('montantmax >=', $montantParPersonne)
             ->first();
         $fraisUnitaire = $row ? $row['frais'] : 0;

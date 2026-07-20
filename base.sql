@@ -109,7 +109,8 @@ INSERT INTO
 VALUES 
     ('Depot'),
     ('Retrait'),
-    ('Transfert');
+    ('Transfert'),
+    ('Commission');
 
 INSERT INTO
     Frais (
