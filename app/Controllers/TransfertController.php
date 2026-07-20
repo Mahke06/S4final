@@ -85,7 +85,7 @@ class TransfertController extends BaseController
 
         if ($client['solde'] < $totalADebiter) {
             return redirect()->back()->withInput()->with('errors', [
-                'Solde insuffisant. Requis : ' . number_format($totalADebiter, 0, ',', ' ') . ' Ar'
+                'Solde insuffisant'
             ]);
         }
 
@@ -99,7 +99,7 @@ class TransfertController extends BaseController
             'montant'     => $montantEnvoye,
             'frais'       => $fraisTransfert,
         ]);
-    
+
         if ($fraisRetrait > 0) {
             $db->table('Historique')->insert([
                 'idclient'    => $clientId,
@@ -111,9 +111,101 @@ class TransfertController extends BaseController
 
         $msg = 'Transfert effectué avec succès.';
         if ($fraisRetrait > 0) {
-            $msg .= ' (Frais retrait inclus : ' . number_format($fraisRetrait, 0, ',', ' ') . ' Ar)';
+            $msg .= ' (Frais retrait inclus)';
         }
 
         return redirect()->to('/client')->with('success', $msg);
+    }
+
+
+
+
+
+    public function multiple()
+    {
+        if (!session()->get('client_id')) {
+            return redirect()->to('/login');
+        }
+        return view('transfert_multiple');
+    }
+
+    public function faireTransfertMultiple()
+    {
+        $clientModel = new ClientModel();
+        $fraisModel = new FraisModel();
+        $clientId = session()->get('client_id');
+        $montantTotal = $this->request->getPost('montant_total');
+        $numeros = $this->request->getPost('numeros');
+
+        if (!$clientId) { 
+            return redirect()->to('/login'); 
+            }
+
+        if (!is_numeric($montantTotal) || $montantTotal <= 0) { 
+            return redirect()->back()->withInput()->with('errors', ['Montant invalide.']); 
+        }
+
+        if (!$numeros || count($numeros) < 2) { 
+            return redirect()->back()->withInput()->with('errors', ['Ajoutez au moins 2 numéros.']); 
+        }
+
+        $client = $clientModel->find($clientId);
+        if (!$client) { 
+            return redirect()->to('/login')->with('error', 'Client introuvable.'); 
+        }
+
+        $idOperateur = session()->get('operateur')['id'];
+        $montantParPersonne = $montantTotal / count($numeros);
+
+        $destinataires = [];
+        foreach ($numeros as $tel) {
+            $tel = trim($tel);
+            if (!$tel) { 
+                continue; 
+            }
+
+            $dest = $clientModel->where('telephone', $tel)->first();
+            if (!$dest) { 
+                return redirect()->back()->withInput()->with('errors', ["Le numéro $tel est introuvable."]); 
+            }
+
+            $opDest = $clientModel->getOperateur($tel);
+            if (!$opDest || $opDest['id'] != $idOperateur) { 
+                return redirect()->back()->withInput()->with('errors', ["Tous les numéros doivent appartenir au même opérateur."]); 
+            }
+
+            $destinataires[] = $dest;
+        }
+
+        if (count($destinataires) < 2) { 
+            return redirect()->back()->withInput()->with('errors', ['Ajoutez au moins 2 numéros.']); 
+        }
+
+        $row = $fraisModel->where('idoperation', 3)->where('idoperateur', $idOperateur)
+            ->where('montantmin <=', $montantParPersonne)->where('montantmax >=', $montantParPersonne)
+            ->first();
+        $fraisUnitaire = $row ? $row['frais'] : 0;
+        $fraisTotal = $fraisUnitaire * count($destinataires);
+        $totalADebiter = $montantTotal + $fraisTotal;
+
+        if ($client['solde'] < $totalADebiter) { 
+            return redirect()->back()->withInput()->with('errors', ['Solde insuffisant']); 
+        }
+
+        $clientModel->update($clientId, ['solde' => $client['solde'] - $totalADebiter]);
+
+        $db = \Config\Database::connect();
+        foreach ($destinataires as $dest) {
+            $clientModel->update($dest['id'], ['solde' => $dest['solde'] + $montantParPersonne]);
+            $db->table('Historique')->insert([
+                'idclient'    => $clientId,
+                'idoperation' => 3,
+                'montant'     => $montantParPersonne,
+                'frais'       => $fraisUnitaire,
+            ]);
+        }
+
+        return redirect()->to('/client')->with('success',
+            'Transfert multiple effectué. ' . count($destinataires) . ' destinataire(s) servis.');
     }
 }

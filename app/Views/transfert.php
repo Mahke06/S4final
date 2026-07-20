@@ -1,9 +1,13 @@
 <?php $title = 'Transfert'; include __DIR__ . '/partials/header.php'; ?>
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
+    <div class="col-md-7 col-lg-6">
         <div class="card shadow-sm border-0">
             <div class="card-body p-4">
-                <h4>Effectuer un transfert</h4>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Effectuer un transfert</h4>
+                    <a href="/transfert/multiple" class="btn btn-outline-primary btn-sm">Multiple</a>
+                </div>
+
                 <form action="/transfert" method="post">
                     <?= csrf_field() ?>
                     <div class="mb-3">
@@ -12,12 +16,12 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Numéro du destinataire</label>
-                        <input type="tel" class="form-control" name="telephone_destinataire" pattern="03[2-4][0-9]{7}" maxlength="10" required>
+                        <input type="tel" class="form-control" name="telephone_destinataire" pattern="03[0-9]{8}" maxlength="10" required>
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" name="inclure_frais" value="1">
                         <label class="form-check-label">Inclure frais de retrait</label>
-                    </div>  
+                    </div>
                     <button type="submit" class="btn btn-info w-100 text-white">Transférer</button>
                 </form>
             </div>
