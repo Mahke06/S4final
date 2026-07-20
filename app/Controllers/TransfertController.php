@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ClientModel;
+use App\Models\FraisModel;
 
 class TransfertController extends BaseController
 {
@@ -35,16 +36,32 @@ class TransfertController extends BaseController
             return redirect()->to('/login')->with('error', 'Client introuvable.');
         }
         
-        $nouveauSolde = $client['solde'] - $montant;
+        $fraisModel = new FraisModel();
+        $frais = $fraisModel->where('idoperation', 3)
+                            ->where('idoperateur', $client['idoperateur'])
+                            ->where('montantmin <=', $montant)
+                            ->where('montantmax >=', $montant)
+                            ->first();
 
-        $clientModel->update($clientId, ['solde' => $nouveauSolde]);
+        if (!$frais) {
+            $frais['frais'] = 0;
+        }
 
         $destinataire = $clientModel->where('telephone', $telephoneDestinataire)->first();
         if (!$destinataire) {
             return redirect()->back()->withInput()->with('errors', ['Destinataire introuvable.']);
         }
 
+        $nouveauSolde = $client['solde'] - ($montant + $frais['frais']); 
+
+        if ($nouveauSolde < 0) {
+            return redirect()->back()->withInput()->with('errors',['Solde insuffisant pour effectuer ce transfert.']);
+        }
+
+        $clientModel->update($clientId, ['solde' => $nouveauSolde]);
+
         $nouveauSoldeDestinataire = $destinataire['solde'] + $montant;
+
         $clientModel->update($destinataire['id'], ['solde' => $nouveauSoldeDestinataire]);
 
         return redirect()->to('/client')->with('success', 'Transfert effectue avec succes.');
