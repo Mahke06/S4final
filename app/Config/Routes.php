@@ -40,3 +40,5 @@ $routes->post('/retrait', 'RetraitController::faireRetrait');
 
 $routes->get('/transfert', 'TransfertController::index');
 $routes->post('/transfert', 'TransfertController::faireTransfert');
+$routes->get('/transfert/multiple', 'TransfertController::multiple');
+$routes->post('/transfert/multiple', 'TransfertController::faireTransfertMultiple');
