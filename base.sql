@@ -22,10 +22,12 @@ CREATE TABLE
     Frais (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         idoperation INTEGER NOT NULL,
+        idoperateur INTEGER NOT NULL,
         montantmin REAL NOT NULL,
         montantmax REAL NOT NULL,
         frais REAL NOT NULL,
-        FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (idoperateur) REFERENCES Operateurs (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 CREATE TABLE
@@ -73,14 +75,14 @@ VALUES
     ('Transfert');
 
 INSERT INTO
-    Frais (idoperation, montantmin, montantmax, frais)
+    Frais (idoperation, idoperateur, montantmin, montantmax, frais)
 VALUES
-    (1, 0, 10000, 500),
-    (1, 10001, 50000, 1000),
-    (2, 0, 10000, 500),
-    (2, 10001, 50000, 1000),
-    (3, 0, 10000, 500),
-    (3, 10001, 50000, 1000);
+    (1, 1, 0, 10000, 500),
+    (1, 1, 10001, 50000, 1000),
+    (2, 2, 0, 10000, 500),
+    (2, 2, 10001, 50000, 1000),
+    (3, 3, 0, 10000, 500),
+    (3, 3, 10001, 50000, 1000);
 
 INSERT INTO
     Client (nom, prenom, telephone, solde, idoperateur)
