@@ -106,7 +106,7 @@ VALUES
 
 INSERT INTO
     Operations (nom)
-VALUES 
+VALUES
     ('Depot'),
     ('Retrait'),
     ('Transfert'),
@@ -114,18 +114,34 @@ VALUES
 
 INSERT INTO
     Frais (
-        idoperation,idnotreoperateur,montantmin,montantmax,frais
+        idoperation,
+        idnotreoperateur,
+        montantmin,
+        montantmax,
+        frais
     )
 VALUES
-    (1, 1, 0, 9999999999999, 0),
-    (2, 1, 0, 100000, 2000),
-    (2, 1, 100001, 300000, 2000),
-    (2, 1, 300001, 500000, 2000),
-    (2, 1, 500001, 9999999999999, 2000),    
-    (3, 1, 0, 100000, 100),
-    (3, 1, 100001, 300000, 500),
-    (3, 1, 300001, 500000, 1200),
-    (3, 1, 500001, 9999999999999, 1000);
+    (1, 1, 0, 999999999, 0),
+
+    (2, 1, 0, 5000, 100),
+    (2, 1, 5001, 10000, 200),
+    (2, 1, 10001, 20000, 300),
+    (2, 1, 20001, 50000, 500),
+    (2, 1, 50001, 100000, 800),
+    (2, 1, 100001, 200000, 1200),
+    (2, 1, 200001, 500000, 1800),
+    (2, 1, 500001, 1000000, 2500),
+    (2, 1, 1000001, 999999999, 3500),
+
+    (3, 1, 0, 5000, 50),
+    (3, 1, 5001, 10000, 100),
+    (3, 1, 10001, 20000, 150),
+    (3, 1, 20001, 50000, 250),
+    (3, 1, 50001, 100000, 400),
+    (3, 1, 100001, 200000, 700),
+    (3, 1, 200001, 500000, 1200),
+    (3, 1, 500001, 1000000, 1800),
+    (3, 1, 1000001, 999999999, 2500);
 
 INSERT INTO
     Commission (idautreoperateur, pourcentage)
@@ -136,14 +152,31 @@ VALUES
 INSERT INTO
     Admin (login, password)
 VALUES
-    ('admin', '$2y$10$dcJTfW80JyELwkWSKoWZVuN7jFjUrPW9GEQgCeOc7aYUG.OxtkIti');
+    (
+        'admin',
+        '$2y$10$dcJTfW80JyELwkWSKoWZVuN7jFjUrPW9GEQgCeOc7aYUG.OxtkIti'
+    );
 
 INSERT INTO
     Client (nom, prenom, telephone, solde)
 VALUES
-    ('ANDRIANTSEHENO', 'Kenny', '0321111111', 0),
-    ('RABEMANANJARA', 'Jonathan', '0322222222', 0),
-    ('RAKOTO', 'Nava', '0323333333', 0),
-    ('RASOA', 'Landy', '0324444444', 0),
-    ('RABENANAHARY', 'Rojo', '0331111111', 500),
-    ('RANDRIAMANGA', 'Faly', '0341111111', 1000);
+    ('Andriams', 'Fifa', '0322514789', 250),
+    ('THIERRY', 'Arsenoh', '0324178632', 500),
+    ('ANDRIANTSEHENO', 'Kenny', '0326385214', 0),
+    ('FAVRE', 'Vinod', '0327412598', 750),
+    ('RAKOTOARISON', 'Harena', '0325821947', 1200),
+    ('MANANTSOA', 'Joh', '0323267845', 300),
+    ('PINTO', 'Lova', '0328642519', 0),
+    ('BESTFRIEND', 'iAina', '0321937486', 150),
+    ('RASOLOFO', 'Tahina', '0324571823', 950),
+    ('RANDRIANASOLO', 'Hasina', '0327159364', 100),
+    ('RAZAFINDRAKOTO', 'Ony', '0322486795', 400),
+    ('RABESON', 'Nantenaina', '0329813572', 650),
+    ('RAKOTONDRAVAO', 'Lova', '0325348716', 50),
+    ('RANDRIAMIHARISOA', 'Toky', '0326729458', 1800),
+    ('RAFANOMEZANTSOA', 'Mirana', '0328164735', 0),
+    ('RAZAFIMAHATRATRA', 'Fenosoa', '0323591842', 220),
+    ('RATSIMBAZAFY', 'Aina', '0329246178', 1300),
+    ('RABENANDRASANA', 'Ando', '0324867315', 700),
+    ('RAKOTOARISON', 'Sitraka', '0341578946', 900),
+    ('RANDRIANANTOANDRO', 'Kanto', '0337635219', 1100);

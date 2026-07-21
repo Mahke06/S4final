@@ -45,7 +45,7 @@ class TransfertController extends BaseController
 
         $operateurSession = session()->get('operateur')['id'];
         $operateurDest = $clientModel->getOperateur($telephoneDestinataire);
-        $memeOperateur = $operateurDest && $operateurDest['id'] == $operateurSession;
+        $memeOperateur = $operateurDest && $operateurDest['type'] === 'nous';
 
         $montantEnvoye = $montant;
         $fraisRetrait = 0;
@@ -193,7 +193,7 @@ class TransfertController extends BaseController
             }
 
             $opDest = $clientModel->getOperateur($tel);
-            if (!$opDest || $opDest['id'] != $idOperateur) { 
+            if (!$opDest || $opDest['type'] !== 'nous') { 
                 return redirect()->back()->withInput()->with('errors', ["Tous les numéros doivent appartenir au même opérateur."]); 
             }
 
