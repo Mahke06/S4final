@@ -87,6 +87,15 @@ CREATE TABLE
         promotion REAL
     );
 
+CREATE TABLE 
+    Epargne (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        idclient INTEGER, 
+        epargne REAL,
+        FOREIGN KEY (idclient) REFERENCES Client (id) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+
+ALTER TABLE Client ADD COLUMN epargne REAL;
 ------------------ INSERTS ------------------
 
 

@@ -111,7 +111,23 @@ class TransfertController extends BaseController
         }
 
         $clientModel->update($clientId, ['solde' => $client['solde'] - $totalADebiter]);
-        $clientModel->update($destinataire['id'], ['solde' => $destinataire['solde'] + $montantEnvoye]);
+
+
+        $db = \Config\Database::connect();
+        $epargneRow = $db->table('Epargne')
+                ->where(
+                    'idclient',$destinataire['id']
+                )->getRowArray();
+        $pc = $epargneRow ? (float)$epargneRow['epargne'] : 0;
+        if ($pc > 0)
+            {
+            $partEpargne = $montantEnvoye * $pc/100;
+            $partCourant = $montantEnvoye - $partEpargne;
+            $clientModel->update($destinataire['id'], ['solde' => $destinataire['solde'] + $partCourant],['epargne' => $destinataire['epargne'] + $partCourant]);
+            }
+            else {
+                $clientModel->update($destinataire['id'], ['solde' => $destinataire['solde'] + $montantEnvoye]);
+            }
 
         $db = \Config\Database::connect();
         $db->table('Historique')->insert([
@@ -150,6 +166,17 @@ class TransfertController extends BaseController
         return redirect()->to('/client')->with('success', $msg);
     }
 
+    public function ajouterEpargne()
+    {
+        $clientModel = new ClientModel();
+        $fraisModel = new FraisModel();
+        $clientId = session()->get('client_id');
+        $epargne = $this->request->getPost('epargne');
+
+        $clientModel->update($clientId, ['epargne' => $epargne]);
+
+        return redirect()->to('/client')->with('success', $msg);
+    }
 
 
 

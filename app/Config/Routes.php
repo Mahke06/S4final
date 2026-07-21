@@ -49,3 +49,6 @@ $routes->get('/transfert', 'TransfertController::index');
 $routes->post('/transfert', 'TransfertController::faireTransfert');
 $routes->get('/transfert/multiple', 'TransfertController::multiple');
 $routes->post('/transfert/multiple', 'TransfertController::faireTransfertMultiple');
+
+$routes->post('/epargne/add', 'TransfertController::ajouterEpargne');
+$routes->get('/epargne', 'ClientController::epargne');

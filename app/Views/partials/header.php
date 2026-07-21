@@ -46,6 +46,7 @@
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/retrait">Retrait</a></li>
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/transfert">Transfert</a></li>
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/historique">Historique</a></li>
+                    <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/epargne">Mon Epargne</a></li>
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/logout">Déconnexion</a></li>
                 <?php elseif (session()->get('admin_id')): ?>
                     <li class="nav-item"><a class="btn btn-outline-light btn-sm mx-2 my-1" href="/admin-logout">Déconnexion</a></li>
