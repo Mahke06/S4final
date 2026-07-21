@@ -77,6 +77,8 @@ class AdminController extends BaseController
         return view('admin/commission', $data);
     }
 
+
+
     public function ajoutCommission()
     {
         if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
@@ -95,6 +97,52 @@ class AdminController extends BaseController
         ]);
 
         return redirect()->to('/admin/commission');
+    }
+
+    public function promotion()
+    {
+        if (!session()->get('admin_id')) {
+            return redirect()->to('/loginOp');
+        }
+        $db = \Config\Database::connect();
+        $data['promotion'] = $db->table('Promotion')
+            ->select('Promotion.*')
+            ->get()->getResultArray();
+        return view('admin/promotion', $data);
+    }
+
+    public function ajoutPromo()
+    {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
+
+        $promotion      = $this->request->getPost('promotion');
+
+       
+
+        $db = \Config\Database::connect();
+        $db->table('Promotion')->insert([
+            'promotion'      => (float) $promotion,
+        ]);
+
+        return redirect()->to('/admin/promotion');
+    }
+
+     public function updatePromotion($id)
+    {
+        if (!session()->get('admin_id')) { return redirect()->to('/loginOp'); }
+
+        $promotion = $this->request->getPost('promotion');
+
+        if (!is_numeric($promotion) || $promotion < 0) {
+            return redirect()->back()->withInput()->with('errors', ['PROMO invalide.']);
+        }
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('Promotion');
+        $builder->where('id', $id);
+        $builder->update(['promotion' => (float) $promotion]);
+
+        return redirect()->to('/admin/promotion');
     }
 
     public function updateCommission($id)

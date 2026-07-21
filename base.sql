@@ -81,7 +81,16 @@ CREATE TABLE
         FOREIGN KEY (idoperation) REFERENCES Operations (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
+CREATE TABLE 
+    Promotion (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        promotion REAL
+    );
+
 ------------------ INSERTS ------------------
+
+
+
 INSERT INTO
     NotreOperateur (nom)
 VALUES
@@ -180,3 +189,9 @@ VALUES
     ('RABENANDRASANA', 'Ando', '0324867315', 700),
     ('RAKOTOARISON', 'Sitraka', '0341578946', 900),
     ('RANDRIANANTOANDRO', 'Kanto', '0337635219', 1100);
+
+
+INSERT INTO 
+    Promotion (promotion)
+VALUES
+    (10);

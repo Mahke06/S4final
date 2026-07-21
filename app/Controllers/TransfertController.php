@@ -92,7 +92,17 @@ class TransfertController extends BaseController
             }
         }
 
-        $totalADebiter = $montantEnvoye + $fraisTransfert + $commission;
+        $promotion = 0;
+        if ($operateurDest && $operateurDest['type'] === 'nous') {
+            $db = \Config\Database::connect();
+            $promotionRow = $db->table('Promotion')
+                ->get()->getRowArray();
+            if ($promotionRow) {
+                $promotion = $fraisTransfert * $promotionRow['promotion'] / 100;
+            }
+        }
+
+        $totalADebiter = $montantEnvoye + $fraisTransfert + $commission - $promotion;
 
         if ($client['solde'] < $totalADebiter) {
             return redirect()->back()->withInput()->with('errors', [

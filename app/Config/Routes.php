@@ -26,6 +26,12 @@ $routes->match(['get', 'post'], '/admin/frais/delete/(:num)', 'FraisController::
 $routes->get('/admin/gains', 'FraisController::gains');
 $routes->get('/admin-logout', 'AdminController::logout');
 
+$routes->get('/admin/promotion', 'AdminController::promotion');
+$routes->post('/admin/promotion/add', 'AdminController::ajoutPromo');
+$routes->post('/admin/commission/promotion/(:num)', 'AdminController::updatePromotion/$1');
+
+
+
 /* ------  Kenny  ------*/
 $routes->get('/login', 'ClientController::index');
 $routes->post('/login', 'ClientController::login');

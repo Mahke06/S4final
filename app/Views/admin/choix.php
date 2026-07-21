@@ -58,5 +58,17 @@
             </div>
         </a>
     </div>
+
+    <div class="col-6 col-md-4">
+        <a href="<?= site_url('admin/promotion') ?>" class="text-decoration-none">
+            <div class="card shadow-sm text-center h-100">
+                <div class="card-body py-4">
+                    <img src="<?= base_url('assets/images/grille.png') ?>" style="max-height:40px;" alt="">
+                    <h6 class="mt-2">Clients</h6>
+                    <small class="text-muted"><?= $nb_clients ?> inscrits</small>
+                </div>
+            </div>
+        </a>
+    </div>
 </div>
 <?php include __DIR__ . '/../partials/footer.php'; ?>
