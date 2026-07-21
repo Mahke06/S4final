@@ -13,7 +13,17 @@ class DepotController extends BaseController
             return redirect()->to('/login');
         }
 
-        return view('depot');
+        $fraisModel = new FraisModel();
+        $data['frais'] = $fraisModel->where('idoperation', 1)
+            ->where('idnotreoperateur', 1)
+            ->orderBy('montantmin')
+            ->findAll();
+
+        $model = new ClientModel();
+        $client = $model->find(session()->get('client_id'));
+        $data['solde'] = $client ? $client['solde'] : 0;
+
+        return view('depot', $data);
     }
 
     public function faireDepot()

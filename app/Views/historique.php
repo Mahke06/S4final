@@ -1,9 +1,9 @@
 <?php $title = 'Historique'; include __DIR__ . '/partials/header.php'; ?>
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0">Historique des transactions</h4>
-    <a href="/client" class="btn btn-outline-secondary btn-sm">Retour</a>
+    <a href="/client" class="btn btn-outline-light btn-sm">Retour</a>
 </div>
-<div class="card shadow-sm border-0">
+<div class="card shadow-sm">
     <div class="table-responsive">
         <table class="table table-striped table-hover mb-0">
             <thead class="table-dark">

@@ -3,11 +3,11 @@
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Situation gain via les différents frais</h4>
-            <a href="<?= site_url('admin') ?>" class="btn btn-outline-secondary btn-sm">Retour</a>
+            <a href="<?= site_url('admin') ?>" class="btn btn-outline-light btn-sm">Retour</a>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="card shadow-sm border-0 mb-4">
+                <div class="card shadow-sm mb-3">
                     <div class="card-header fw-bold">Gain sur notre operateur</div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover mb-0">
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card shadow-sm border-0 mb-4">
+                <div class="card shadow-sm mb-3">
                     <div class="card-header fw-bold">Gain sur autre operateur</div>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover mb-0">
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm">
             <div class="card-body text-end">
                 <h5 class="mb-0">Total global : <?= number_format($totalGlobal, 0, ',', ' ') ?> Ar</h5>
             </div>

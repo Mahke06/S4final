@@ -1,11 +1,11 @@
 <?php $title = 'Transfert multiple'; include __DIR__ . '/partials/header.php'; ?>
 <div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body p-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="mb-0">Envoi multiple</h4>
-                    <a href="/transfert" class="btn btn-outline-primary btn-sm">Simple</a>
+                    <a href="/transfert" class="btn btn-outline-success btn-sm">Simple</a>
                 </div>
 
                 <form action="/transfert/multiple" method="post">
@@ -28,7 +28,7 @@
                         </div>
                         <button type="button" class="btn btn-sm btn-outline-success" onclick="ajouterNumero()">+ Ajouter</button>
                     </div>
-                    <button type="submit" class="btn btn-info w-100 text-white">Transférer à tous</button>
+                    <button type="submit" class="btn btn-success w-100">Transférer à tous</button>
                 </form>
             </div>
         </div>

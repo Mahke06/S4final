@@ -1,18 +1,11 @@
 <?php $title = 'Prefixes'; include __DIR__ . '/../partials/header.php'; ?>
 <div class="row justify-content-center">
     <div class="col-12">
-        <?php
-        $db      = \Config\Database::connect();
-        $tous    = $db->table('NosPrefixes')
-            ->select('NosPrefixes.*, NotreOperateur.nom AS operateur')
-            ->join('NotreOperateur', 'NotreOperateur.id = NosPrefixes.idnotreoperateur')
-            ->orderBy('NosPrefixes.id', 'DESC')
-            ->get()->getResultArray();
-        $actuel  = $tous[0] ?? null;
-        $anciens = array_slice($tous, 1);
-        ?>
-        <h4>Prefixe actuel</h4>
-        <div class="card shadow-sm border-0 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Prefixe actuel</h4>
+            <a href="<?= site_url('admin') ?>" class="btn btn-outline-light btn-sm mt-3">Retour</a>
+        </div>
+        <div class="card shadow-sm mb-3">
             <div class="card-body">
                 <form method="post" action="<?= site_url('/admin/prefixe/update') ?>">
                     <?= csrf_field() ?>
@@ -27,7 +20,7 @@
         </div>
         <?php if ($anciens): ?>
         <h4>Historique</h4>
-        <div class="card shadow-sm border-0">
+        <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-striped table-hover mb-0">
                     <thead class="table-dark">
@@ -45,7 +38,6 @@
             </div>
         </div>
         <?php endif; ?>
-        <a href="<?= site_url('admin') ?>" class="btn btn-outline-secondary btn-sm mt-3">Retour</a>
     </div>
 </div>
 <?php include __DIR__ . '/../partials/footer.php'; ?>

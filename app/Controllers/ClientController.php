@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ClientModel;
+use Config\Database;
 
 
 class ClientController extends BaseController
@@ -32,7 +33,20 @@ class ClientController extends BaseController
             return redirect()->to('/login');
         }
 
-        return view('client', ['client' => $client]);
+        $db = Database::connect();
+        $recent = $db->table('Historique')
+            ->select('Historique.*, Operations.nom as operation_nom')
+            ->join('Operations', 'Operations.id = Historique.idoperation')
+            ->where('Historique.idclient', $clientId)
+            ->orderBy('Historique.date', 'DESC')
+            ->limit(5)
+            ->get()
+            ->getResultArray();
+
+        return view('client', [
+            'client' => $client,
+            'recent' => $recent,
+        ]);
     }
 
     public function login()
@@ -50,7 +64,7 @@ class ClientController extends BaseController
             ],
         ];
         if (! $this->validate($regles)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+            return redirect()->to('/login')->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $prefixe = substr($telephone, 0, 3);
@@ -58,14 +72,14 @@ class ClientController extends BaseController
         $estNotrePrefixe = $db->table('NosPrefixes')->where('prefixe', $prefixe)->countAllResults() > 0;
 
         if (! $estNotrePrefixe) {
-            return redirect()->back()->withInput()->with('errors', ['Verifier numero.']);
+            return redirect()->to('/login')->withInput()->with('errors', ['Verifier numero.']);
         }
 
         $model = new ClientModel();
         $client = $model->where('telephone', $telephone)->first();
 
         if (! $client) {
-            return redirect()->back()->withInput()->with('errors',['Verifier numero.']);
+            return redirect()->to('/login')->withInput()->with('errors',['Verifier numero.']);
         }
 
         $operateur = $model->getOperateur($telephone);

@@ -1,11 +1,11 @@
 <?php $title = 'Transfert'; include __DIR__ . '/partials/header.php'; ?>
 <div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-body p-3">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h4 class="mb-0">Effectuer un transfert</h4>
-                    <a href="/transfert/multiple" class="btn btn-outline-primary btn-sm">Multiple</a>
+                    <a href="/transfert/multiple" class="btn btn-outline-success btn-sm">Multiple</a>
                 </div>
 
                 <form action="/transfert" method="post">
@@ -22,8 +22,7 @@
                         <input type="checkbox" class="form-check-input" name="inclure_frais" value="1">
                         <label class="form-check-label">Inclure frais de retrait</label>
                     </div>
-                    </div>
-                    <button type="submit" class="btn btn-info w-100 text-white">Transférer</button>
+                    <button type="submit" class="btn btn-success w-100">Transférer</button>
                 </form>
             </div>
         </div>

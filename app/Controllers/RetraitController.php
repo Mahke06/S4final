@@ -15,7 +15,17 @@ class RetraitController extends BaseController
             return redirect()->to('/login');
         }
 
-        return view('retrait');
+        $fraisModel = new FraisModel();
+        $data['frais'] = $fraisModel->where('idoperation', 2)
+            ->where('idnotreoperateur', 1)
+            ->orderBy('montantmin')
+            ->findAll();
+
+        $model = new ClientModel();
+        $client = $model->find(session()->get('client_id'));
+        $data['solde'] = $client ? $client['solde'] : 0;
+
+        return view('retrait', $data);
     }
 
     public function faireRetrait()
@@ -28,7 +38,7 @@ class RetraitController extends BaseController
             return redirect()->to('/login');
         }
         if (!is_numeric($montant) || $montant <= 0) {
-            return redirect()->back()->withInput()->with('errors', ['Montant invalide.']);
+            return redirect()->to('/retrait')->withInput()->with('errors', ['Montant invalide.']);
         }
         $client = $clientModel->find($clientId);
         if (!$client) {
@@ -48,7 +58,7 @@ class RetraitController extends BaseController
         $nouveauSolde = $client['solde'] - ($montant + $frais['frais']);
 
         if ($nouveauSolde < 0) {
-            return redirect()->back()->withInput()->with('errors',['Solde insuffisant pour effectuer ce retrait.']);
+            return redirect()->to('/retrait')->withInput()->with('errors',['Solde insuffisant.']);
         }
 
         $clientModel->update($clientId, ['solde' => $nouveauSolde]);

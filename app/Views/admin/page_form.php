@@ -1,8 +1,8 @@
 <?php $title = 'Modifier un frais'; include __DIR__ . '/../partials/header.php'; ?>
 <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm border-0">
-            <div class="card-body p-4">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-3">
                 <h4 class="mb-4">Modifier un frais</h4>
                 <form method="post" action="<?= site_url('admin/frais/update/' . $frais['id']) ?>">
                     <?= csrf_field() ?>

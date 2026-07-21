@@ -38,7 +38,18 @@ class AdminController extends BaseController
         if (!session()->get('admin_id')) {
             return redirect()->to('/loginOp');
         }
-        return view('admin/choix');
+
+        $db = \Config\Database::connect();
+        $data['nb_frais']     = $db->table('Frais')->countAllResults();
+        $data['nb_commission'] = $db->table('Commission')->countAllResults();
+        $data['nb_clients']   = $db->table('Client')
+            ->join('NosPrefixes', 'SUBSTR(Client.telephone, 1, 3) = NosPrefixes.prefixe')
+            ->countAllResults();
+        $data['total_gains']  = $db->table('Historique')
+            ->selectSum('frais')
+            ->get()->getRow()->frais ?? 0;
+
+        return view('admin/choix', $data);
     }
 
     public function clients()
@@ -59,7 +70,10 @@ class AdminController extends BaseController
             return redirect()->to('/loginOp');
         }
         $db = \Config\Database::connect();
-        $data['autreOperateurs'] = $db->table('AutreOperateur')->get()->getResultArray();
+        $data['commissions'] = $db->table('Commission')
+            ->select('Commission.*, AutreOperateur.nom as operateur_nom')
+            ->join('AutreOperateur', 'AutreOperateur.id = Commission.idautreoperateur', 'left')
+            ->get()->getResultArray();
         return view('admin/commission', $data);
     }
 
@@ -116,7 +130,15 @@ class AdminController extends BaseController
         if (!session()->get('admin_id')) {
             return redirect()->to('/loginOp');
         }
-        return view('admin/prefixe');
+        $db = \Config\Database::connect();
+        $tous = $db->table('NosPrefixes')
+            ->select('NosPrefixes.*, NotreOperateur.nom AS operateur')
+            ->join('NotreOperateur', 'NotreOperateur.id = NosPrefixes.idnotreoperateur')
+            ->orderBy('NosPrefixes.id', 'DESC')
+            ->get()->getResultArray();
+        $data['actuel'] = $tous[0] ?? null;
+        $data['anciens'] = array_slice($tous, 1);
+        return view('admin/prefixe', $data);
     }
 
     public function updatePrefixe()

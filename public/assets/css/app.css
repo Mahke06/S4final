@@ -1,0 +1,6 @@
+body { background-color: #b0b0b0;
+       font-family: 'Ubuntu Sans', sans-serif; }
+.card { border: 2px solid #dee2e6; }
+.table { border: 1px solid #dee2e6; }
+.card-header { border-bottom: 1px solid #dee2e6; }
+.table-dark th { border-color: #454d55; }

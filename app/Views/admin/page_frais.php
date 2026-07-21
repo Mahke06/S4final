@@ -16,7 +16,7 @@ $opIds = [1 => 'depot', 2 => 'retrait', 3 => 'transfert'];
 </div>
 
 <?php foreach ([1, 2, 3] as $opId): $rows = ${$opIds[$opId]}; ?>
-<div class="card shadow-sm border-0 mb-4">
+<div class="card shadow-sm mb-3">
     <div class="card-header fw-bold"><?= $operations[$opId] ?></div>
     <div class="table-responsive">
         <table class="table table-striped table-hover mb-0">

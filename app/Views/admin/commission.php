@@ -1,21 +1,18 @@
 <?php $title = 'Commission'; include __DIR__ . '/../partials/header.php'; ?>
 <div class="row justify-content-center">
     <div class="col-12">
-        <h4>Commission</h4>
-        <div class="card shadow-sm border-0">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Commission</h4>
+            <a href="<?= site_url('admin') ?>" class="btn btn-outline-light btn-sm mt-3">Retour</a>
+        </div>
+        <div class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-striped table-hover mb-0">
                     <thead class="table-dark">
                         <tr><th>Operateur cible</th><th>Pourcentage</th></tr>
                     </thead>
                     <tbody>
-                        <?php
-                        $db = \Config\Database::connect();
-                        $commissions = $db->table('Commission')
-                            ->select('Commission.*, AutreOperateur.nom as operateur_nom')
-                            ->join('AutreOperateur', 'AutreOperateur.id = Commission.idautreoperateur', 'left')
-                            ->get()->getResultArray();
-                        foreach ($commissions as $c): ?>
+                        <?php foreach ($commissions as $c): ?>
                         <tr>
                             <form method="post" action="<?= site_url('admin/commission/update/' . $c['id']) ?>" style="display:contents">
                                 <?= csrf_field() ?>
@@ -35,7 +32,6 @@
                 </table>
             </div>
         </div>
-        <a href="<?= site_url('admin') ?>" class="btn btn-outline-secondary btn-sm mt-3">Retour</a>
     </div>
 </div>
 <?php include __DIR__ . '/../partials/footer.php'; ?>
