@@ -151,13 +151,12 @@ class FraisController extends BaseController
 
         $gains = $db->query("
             SELECT
-                CASE WHEN np.id IS NOT NULL THEN 'Nous' ELSE 'Autre' END AS type,
+                CASE WHEN o.id = 4 THEN 'Autre' ELSE 'Nous' END AS type,
                 o.nom AS operation,
                 SUM(h.frais) AS total
             FROM Historique h
             JOIN Client c ON c.id = h.idclient
             JOIN Operations o ON o.id = h.idoperation
-            LEFT JOIN NosPrefixes np ON SUBSTR(c.telephone, 1, 3) = np.prefixe
             GROUP BY type, h.idoperation
             ORDER BY type, o.nom
         ")->getResultArray();
